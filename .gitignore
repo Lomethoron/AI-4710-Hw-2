@@ -46,3 +46,4 @@ Temporary Items
 .classpath
 .project
 .settings/org.eclipse.jdt.core.prefs
+/AStarRunner.class
