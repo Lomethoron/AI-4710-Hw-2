@@ -47,3 +47,5 @@ Temporary Items
 .project
 .settings/org.eclipse.jdt.core.prefs
 /AStarRunner.class
+/Tile.class
+/TileComparator.class

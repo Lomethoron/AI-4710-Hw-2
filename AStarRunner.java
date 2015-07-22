@@ -6,17 +6,34 @@ import java.util.*;
 public class AStarRunner extends Robot {
 
 	List<List<Tile>> localMap;
-	int yEndPos, xEndPos;
+	int yEndPos, xEndPos, yStartPos, xStartPos, numCol, numRow;
 	Stack<Point> moves = new Stack<Point>();
 
 	@Override
 	public void travelToDestination() {
-		//super.move( new Point(1,1));
 		buildLocalMap();
 		findHeuristic();
 		Tile finalTile = findPath();
 		executePath(finalTile);
-		System.out.println("("+super.getX()+","+ super.getY()+")");
+		//System.out.println("("+super.getX()+","+ super.getY()+")");
+	}
+	
+	@Override
+	//This is literally the coolest thing ever, I had no idea you could do this was possible
+	public void addToWorld(World world){
+		Point endCoord = world.getEndPos();
+		yEndPos = (int) endCoord.getY();
+		xEndPos = (int) endCoord.getX();
+		
+		Point startCoord = world.getStartPos();
+		yStartPos = (int) startCoord.getY();
+		xStartPos = (int) startCoord.getX();
+		
+		//System.out.println(endCoord.toString());
+		numCol = world.numCols();
+		numRow = world.numRows();
+		//System.out.println("numCol: "+numCol+" numRow: "+numRow);
+		super.addToWorld(world);
 	}
 
 	private void findHeuristic() {
@@ -41,10 +58,10 @@ public class AStarRunner extends Robot {
 	}
 
 	private void createPath(Tile tile) {
-		moves.push(new Point(tile.getxPos(), tile.getyPos()));
 		if (tile.isStart()) {
 			return;
 		}
+		moves.push(new Point(tile.getyPos(), tile.getxPos()));// again with the matrix notation :/ Print statements are in readable form
 		 //System.out.println("We're pushing ("+tile.getxPos()+","+tile.getyPos()+")");
 		 //System.out.println("We're pushing (" + (tile.getxPos()+1) + "," + (char)(tile.getyPos()+65)+")");
 		createPath(localMap.get(tile.getyPrev()).get(tile.getxPrev()));
@@ -110,19 +127,19 @@ public class AStarRunner extends Robot {
 
 	private void buildLocalMap() {
 		localMap = new ArrayList<List<Tile>>(0);
-		int xPos = 0;
-		int yPos = 0;
-		while (true) { // y
-			xPos = 0;
-			String yPingResult = super.pingMap(new Point(xPos, yPos));
-			if (yPingResult == null) {
-				break;
-			}
+		for(int yPos = 0; yPos<numRow; yPos++) { // y
+//			xPos = 0;
+//			String yPingResult = super.pingMap(new Point(xPos, yPos));
+//			if (yPingResult == null) {
+//				throw new RuntimeException("We have royally messed up: YCoord out of bounds")
+//			}
 			localMap.add(new ArrayList<Tile>());
-			while (true) {// x
-				String xPingResult = super.pingMap(new Point(xPos, yPos));
+			for(int xPos = 0; xPos<numCol; xPos++) {// x
+				String xPingResult = super.pingMap(new Point(yPos, xPos)); //Matrix ordering, why, why
+				//System.out.println(xPingResult);
+				//System.out.println("Pinging ("+xPos+","+yPos+")");
 				if (xPingResult == null) {
-					break;
+					throw new RuntimeException("We have royally messed up: XCoord out of bounds");
 				}
 
 				boolean isPassible = true;
@@ -133,17 +150,14 @@ public class AStarRunner extends Robot {
 					}
 					if (xPingResult.equals("F")) {
 						tile.setEnd(true);
-						xEndPos = xPos;
-						yEndPos = yPos;
+						//xEndPos = xPos;
+						//yEndPos = yPos;
 					}
 					localMap.get(yPos).add(tile);
 				} else {
 					localMap.get(yPos).add(new Tile(!isPassible, xPos, yPos));
 				}
-				xPos++;
-
 			}
-			yPos++;
 		}
 		// Unessecary pinging
 		/*
@@ -157,7 +171,7 @@ public class AStarRunner extends Robot {
 
 	public static void main(String args[]) {
 		try {
-			World myWorld = new World("input1.txt", false);
+			World myWorld = new World("stupidMaze.txt", false);
 			AStarRunner myRobot = new AStarRunner();
 			myRobot.addToWorld(myWorld);
 			myRobot.travelToDestination();
