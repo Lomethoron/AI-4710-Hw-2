@@ -11,10 +11,12 @@ public class AStarRunner extends Robot {
 
 	@Override
 	public void travelToDestination() {
+		//super.move( new Point(1,1));
 		buildLocalMap();
 		findHeuristic();
 		Tile finalTile = findPath();
 		executePath(finalTile);
+		System.out.println("("+super.getX()+","+ super.getY()+")");
 	}
 
 	private void findHeuristic() {
@@ -29,10 +31,10 @@ public class AStarRunner extends Robot {
 	}
 
 	private void executePath(Tile finalTile) {
-		Stack<Point> moves = new Stack<Point>();
 		createPath(finalTile);
 		while (!moves.empty()) {
 			Point nextMove = moves.pop();
+			//System.out.println(nextMove.toString());
 			super.move(nextMove);
 		}
 
@@ -44,7 +46,7 @@ public class AStarRunner extends Robot {
 			return;
 		}
 		 //System.out.println("We're pushing ("+tile.getxPos()+","+tile.getyPos()+")");
-		 System.out.println("We're pushing (" + (tile.getxPos()+1) + "," + (char)(tile.getyPos()+65)+")");
+		 //System.out.println("We're pushing (" + (tile.getxPos()+1) + "," + (char)(tile.getyPos()+65)+")");
 		createPath(localMap.get(tile.getyPrev()).get(tile.getxPrev()));
 
 	}
@@ -85,7 +87,7 @@ public class AStarRunner extends Robot {
 					if (nextPossibleTile.isEnd()) {
 						nextPossibleTile.setxPrev(xTilePos);
 						nextPossibleTile.setyPrev(yTilePos);
-						System.out.println("Curr ("+xPossibleMove+","+yPossibleMove+") Prev ("+xTilePos+","+yTilePos+")");
+						//System.out.println("Curr ("+xPossibleMove+","+yPossibleMove+") Prev ("+xTilePos+","+yTilePos+")");
 						return nextPossibleTile;
 					}
 					if (!nextPossibleTile.isClosed() &&!nextPossibleTile.isOpen()&& nextPossibleTile.isPassable()) {
