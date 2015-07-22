@@ -14,7 +14,7 @@ public class AStarRunner extends Robot {
 		buildLocalMap();
 		findHeuristic();
 		Tile finalTile = findPath();
-		//executePath(finalTile);
+		executePath(finalTile);
 	}
 
 	private void findHeuristic() {
@@ -39,12 +39,12 @@ public class AStarRunner extends Robot {
 	}
 
 	private void createPath(Tile tile) {
+		moves.push(new Point(tile.getxPos(), tile.getyPos()));
 		if (tile.isStart()) {
 			return;
 		}
-		// System.out.println("Were pushing
-		// ("+tile.getxPos()+","+tile.getyPos()+")");
-		moves.push(new Point(tile.getxPos(), tile.getyPos()));
+		 //System.out.println("We're pushing ("+tile.getxPos()+","+tile.getyPos()+")");
+		 System.out.println("We're pushing (" + (tile.getxPos()+1) + "," + (char)(tile.getyPos()+65)+")");
 		createPath(localMap.get(tile.getyPrev()).get(tile.getxPrev()));
 
 	}
@@ -67,7 +67,8 @@ public class AStarRunner extends Robot {
 			Tile curTile = openList.poll();
 			int xTilePos = curTile.getxPos();
 			int yTilePos = curTile.getyPos();
-			System.out.println("(" + (xTilePos+1) + "," + (char)(yTilePos+65)+")");
+			//System.out.println("(" + (xTilePos) + "," + (yTilePos)+")");
+			//System.out.println("(" + (xTilePos+1) + "," + (char)(yTilePos+65)+")");
 			for (int yPossibleMove = yTilePos - 1; yPossibleMove <= yTilePos + 1; yPossibleMove++) {
 				// stay in bounds
 				if (yPossibleMove < yMin || yPossibleMove >= yMax) {
@@ -80,16 +81,21 @@ public class AStarRunner extends Robot {
 						continue;
 					}
 					//System.out.println("We're trying (" + (xPossibleMove+1) + "," + (char)(yPossibleMove+65)+")");
-					Tile nextPossibleTile = localMap.get(xPossibleMove).get(yPossibleMove);
-					nextPossibleTile.setDistFromStart(curTile.getDistFromStart() + 1);
-					nextPossibleTile.setxPrev(xTilePos);
-					nextPossibleTile.setyPrev(yTilePos);
+					Tile nextPossibleTile = localMap.get(yPossibleMove).get(xPossibleMove);
 					if (nextPossibleTile.isEnd()) {
+						nextPossibleTile.setxPrev(xTilePos);
+						nextPossibleTile.setyPrev(yTilePos);
+						System.out.println("Curr ("+xPossibleMove+","+yPossibleMove+") Prev ("+xTilePos+","+yTilePos+")");
 						return nextPossibleTile;
 					}
-					if (!nextPossibleTile.isClosed() && nextPossibleTile.isPassable()) {
+					if (!nextPossibleTile.isClosed() &&!nextPossibleTile.isOpen()&& nextPossibleTile.isPassable()) {
+						nextPossibleTile.setDistFromStart(curTile.getDistFromStart() + 1);
+						//System.out.println("Curr ("+xPossibleMove+","+yPossibleMove+") Prev ("+xTilePos+","+yTilePos+")");
+						nextPossibleTile.setxPrev(xTilePos);
+						nextPossibleTile.setyPrev(yTilePos);
+						nextPossibleTile.setOpen(true);
 						openList.add(nextPossibleTile);
-						System.out.println("We're trying (" + (xPossibleMove+1) + "," + (char)(yPossibleMove+65)+")");
+						//System.out.println("We're trying (" + (xPossibleMove+1) + "," + (char)(yPossibleMove+65)+")");
 					}
 
 				}

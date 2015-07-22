@@ -1,6 +1,6 @@
 
 public class Tile {
-	private boolean isPassable, isClosed, isStart, isEnd;
+	private boolean isPassable, isClosed, isStart, isEnd, isOpen;
 	
 	private double certainty, distToEnd;
 	
@@ -12,6 +12,7 @@ public class Tile {
 		isClosed = false;
 		isStart = false;
 		isEnd = false;
+		isOpen = false;
 		certainty = -1;
 		distToEnd = -1;
 		distOfLastPing = -1;
@@ -29,6 +30,7 @@ public class Tile {
 		isClosed = false;
 		isStart = false;
 		isEnd = false;
+		isOpen = false;
 		certainty = -1;
 		distToEnd = -1;
 		distOfLastPing = -1;
@@ -36,6 +38,12 @@ public class Tile {
 		yPrev = -1;
 		distFromStart = -1;
 		
+	}
+	public boolean isOpen() {
+		return isOpen;
+	}
+	public void setOpen(boolean isOpen) {
+		this.isOpen = isOpen;
 	}
 	public double getDistToEnd() {
 		return distToEnd;
