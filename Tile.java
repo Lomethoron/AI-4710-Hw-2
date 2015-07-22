@@ -13,7 +13,7 @@ public class Tile {
 		isStart = false;
 		isEnd = false;
 		isOpen = false;
-		certainty = -1;
+		certainty = 1;
 		distToEnd = -1;
 		distOfLastPing = -1;
 		xPrev = -1;
@@ -31,7 +31,7 @@ public class Tile {
 		isStart = false;
 		isEnd = false;
 		isOpen = false;
-		certainty = -1;
+		certainty = 1;
 		distToEnd = -1;
 		distOfLastPing = -1;
 		xPrev = -1;

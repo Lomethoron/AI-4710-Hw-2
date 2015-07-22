@@ -15,24 +15,23 @@ public class AStarRunner extends Robot {
 		findHeuristic();
 		Tile finalTile = findPath();
 		executePath(finalTile);
-		//System.out.println("("+super.getX()+","+ super.getY()+")");
+		// System.out.println("("+super.getX()+","+ super.getY()+")");
 	}
-	
+
 	@Override
-	//This is literally the coolest thing ever, I had no idea you could do this was possible
-	public void addToWorld(World world){
+	public void addToWorld(World world) {
 		Point endCoord = world.getEndPos();
 		yEndPos = (int) endCoord.getY();
 		xEndPos = (int) endCoord.getX();
-		
+
 		Point startCoord = world.getStartPos();
 		yStartPos = (int) startCoord.getY();
 		xStartPos = (int) startCoord.getX();
-		
-		//System.out.println(endCoord.toString());
+
+		// System.out.println(endCoord.toString());
 		numCol = world.numCols();
 		numRow = world.numRows();
-		//System.out.println("numCol: "+numCol+" numRow: "+numRow);
+		// System.out.println("numCol: "+numCol+" numRow: "+numRow);
 		super.addToWorld(world);
 	}
 
@@ -51,7 +50,7 @@ public class AStarRunner extends Robot {
 		createPath(finalTile);
 		while (!moves.empty()) {
 			Point nextMove = moves.pop();
-			//System.out.println(nextMove.toString());
+			// System.out.println(nextMove.toString());
 			super.move(nextMove);
 		}
 
@@ -107,7 +106,7 @@ public class AStarRunner extends Robot {
 						//System.out.println("Curr ("+xPossibleMove+","+yPossibleMove+") Prev ("+xTilePos+","+yTilePos+")");
 						return nextPossibleTile;
 					}
-					if (!nextPossibleTile.isClosed() &&!nextPossibleTile.isOpen()&& nextPossibleTile.isPassable()) {
+					if (!nextPossibleTile.isClosed() && !nextPossibleTile.isOpen() && nextPossibleTile.isPassable()) {
 						nextPossibleTile.setDistFromStart(curTile.getDistFromStart() + 1);
 						//System.out.println("Curr ("+xPossibleMove+","+yPossibleMove+") Prev ("+xTilePos+","+yTilePos+")");
 						nextPossibleTile.setxPrev(xTilePos);
@@ -127,12 +126,7 @@ public class AStarRunner extends Robot {
 
 	private void buildLocalMap() {
 		localMap = new ArrayList<List<Tile>>(0);
-		for(int yPos = 0; yPos<numRow; yPos++) { // y
-//			xPos = 0;
-//			String yPingResult = super.pingMap(new Point(xPos, yPos));
-//			if (yPingResult == null) {
-//				throw new RuntimeException("We have royally messed up: YCoord out of bounds")
-//			}
+		for (int yPos = 0; yPos < numRow; yPos++) { // y
 			localMap.add(new ArrayList<Tile>());
 			for(int xPos = 0; xPos<numCol; xPos++) {// x
 				String xPingResult = super.pingMap(new Point(yPos, xPos)); //Matrix ordering, why, WHY
@@ -150,8 +144,8 @@ public class AStarRunner extends Robot {
 					}
 					if (xPingResult.equals("F")) {
 						tile.setEnd(true);
-						//xEndPos = xPos;
-						//yEndPos = yPos;
+						// xEndPos = xPos;
+						// yEndPos = yPos;
 					}
 					localMap.get(yPos).add(tile);
 				} else {
@@ -159,19 +153,11 @@ public class AStarRunner extends Robot {
 				}
 			}
 		}
-		// Unessecary pinging
-		/*
-		 * for(yPos = 0; super.pingMap(new Point(xPos,yPos)) != null; yPos++){
-		 * for(xPos = 0; super.pingMap(new Point(xPos, yPos)) != null; xPos++){
-		 * 
-		 * } }
-		 */
-
 	}
 
 	public static void main(String args[]) {
 		try {
-			World myWorld = new World("stupidMaze.txt", false);
+			World myWorld = new World("input1.txt", false);
 			AStarRunner myRobot = new AStarRunner();
 			myRobot.addToWorld(myWorld);
 			myRobot.travelToDestination();
