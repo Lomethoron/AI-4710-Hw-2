@@ -135,7 +135,7 @@ public class AStarRunner extends Robot {
 //			}
 			localMap.add(new ArrayList<Tile>());
 			for(int xPos = 0; xPos<numCol; xPos++) {// x
-				String xPingResult = super.pingMap(new Point(yPos, xPos)); //Matrix ordering, why, why
+				String xPingResult = super.pingMap(new Point(yPos, xPos)); //Matrix ordering, why, WHY
 				//System.out.println(xPingResult);
 				//System.out.println("Pinging ("+xPos+","+yPos+")");
 				if (xPingResult == null) {
